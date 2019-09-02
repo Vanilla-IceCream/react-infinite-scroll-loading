@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "node"
+  - "lts/*"
+
+install: true
+
+cache:
+  yarn: true
+  directories: node_modules
+
+before_script: yarn install
+script: yarn test
+after_success: yarn run coverage
