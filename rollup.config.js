@@ -6,15 +6,10 @@ import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import uglify from 'rollup-plugin-uglify';
 
+import babelrc from './babel.config';
 import pkg from './package.json';
 
-const babelrc = JSON.parse(readFileSync('./.babelrc', 'utf8'));
-
-babelrc.presets.splice(0, 1, ['env', { modules: false }]);
-babelrc.plugins.splice(0, 0, 'external-helpers');
-
 const BABEL_CONFIG = {
-  babelrc: false,
   ...babelrc,
   exclude: 'node_modules/**',
 };
@@ -22,7 +17,7 @@ const BABEL_CONFIG = {
 const UMD_CONFIG = {
   file: pkg.browser,
   format: 'umd',
-  name: 'VuexBound',
+  name: 'ReactInfiniteScrollLoading',
   globals: {},
 };
 

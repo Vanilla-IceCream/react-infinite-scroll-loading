@@ -13,7 +13,7 @@ module.exports = api => {
               shippedProposals: true,
               targets: '> 0.25%, not dead',
             },
-          ]
+          ],
         ],
         plugins: [],
       },
@@ -29,7 +29,7 @@ module.exports = api => {
                 node: 'current',
               },
             },
-          ]
+          ],
         ],
         plugins: [],
       },

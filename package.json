@@ -1,0 +1,43 @@
+{
+  "name": "react-infinite-scroll-loading",
+  "version": "0.1.0",
+  "description": "Infinite scroll component for React.",
+  "main": "dist/react-infinite-scroll-loading.cjs.js",
+  "module": "dist/react-infinite-scroll-loading.esm.js",
+  "browser": "dist/react-infinite-scroll-loading.umd.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest --coverage",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vanilla-IceCream/react-infinite-scroll-loading.git"
+  },
+  "keywords": [
+    "React",
+    "Infinite",
+    "Scroll",
+    "Loading"
+  ],
+  "author": "Vanilla IceCream",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vanilla-IceCream/react-infinite-scroll-loading/issues"
+  },
+  "homepage": "https://github.com/Vanilla-IceCream/react-infinite-scroll-loading#readme",
+  "peerDependencies": {
+    "react": ">= 15 < 17"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "react": "^16.9.0",
+    "rollup": "^1.20.3"
+  }
+}
