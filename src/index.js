@@ -16,7 +16,7 @@ export default class InfiniteScroll extends Component {
     threshold: PropTypes.number,
     useCapture: PropTypes.bool,
     useWindow: PropTypes.bool,
-    resetPage: PropTypes.bool
+    resetPage: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -31,7 +31,7 @@ export default class InfiniteScroll extends Component {
     useCapture: false,
     loader: null,
     getScrollParent: null,
-    resetPage: false
+    resetPage: false,
   };
 
   constructor(props) {
@@ -86,7 +86,7 @@ export default class InfiniteScroll extends Component {
     const testOptions = {
       get passive() {
         passive = true;
-      }
+      },
     };
 
     try {
@@ -104,7 +104,7 @@ export default class InfiniteScroll extends Component {
     if (this.isPassiveSupported()) {
       options = {
         useCapture: this.props.useCapture,
-        passive: true
+        passive: true,
       };
     }
     return options;
@@ -124,7 +124,7 @@ export default class InfiniteScroll extends Component {
     scrollEl.removeEventListener(
       'mousewheel',
       this.mousewheelListener,
-      this.options ? this.options : this.props.useCapture
+      this.options ? this.options : this.props.useCapture,
     );
   }
 
@@ -137,12 +137,12 @@ export default class InfiniteScroll extends Component {
     scrollEl.removeEventListener(
       'scroll',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture
+      this.options ? this.options : this.props.useCapture,
     );
     scrollEl.removeEventListener(
       'resize',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture
+      this.options ? this.options : this.props.useCapture,
     );
   }
 
@@ -174,17 +174,17 @@ export default class InfiniteScroll extends Component {
     scrollEl.addEventListener(
       'mousewheel',
       this.mousewheelListener,
-      this.options ? this.options : this.props.useCapture
+      this.options ? this.options : this.props.useCapture,
     );
     scrollEl.addEventListener(
       'scroll',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture
+      this.options ? this.options : this.props.useCapture,
     );
     scrollEl.addEventListener(
       'resize',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture
+      this.options ? this.options : this.props.useCapture,
     );
 
     if (this.props.initialLoad) {

@@ -1,7 +1,6 @@
 {
   "extends": [
-    "airbnb-base",
-    "prettier"
+    "airbnb-base"
   ],
   "env": {
     "node": true,
@@ -14,18 +13,7 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "plugins": [
-    "prettier"
-  ],
-  "rules": {
-    "prettier/prettier": "error"
-  },
-  "settings": {
-    "import/resolver": {
-      "babel-plugin-root-import": {
-        "rootPathPrefix": "~",
-        "rootPathSuffix": "src"
-      }
-    }
-  }
+  "plugins": [],
+  "rules": {},
+  "settings": {}
 }
