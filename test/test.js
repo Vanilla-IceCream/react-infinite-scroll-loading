@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import InfiniteScroll from '../src/InfiniteScroll';
+import InfiniteScroll from '~/';
 
 process.chdir(__dirname);
 

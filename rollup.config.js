@@ -10,28 +10,10 @@ export default [
     input: join(__dirname, 'src/index.js'),
     output: [
       { file: pkg.main, format: 'cjs', sourcemap: true },
-      { file: pkg.module, format: 'es', sourcemap: true },
+      { file: pkg.module, format: 'esm', sourcemap: true },
     ],
     plugins: [
       babel({
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              targets: '> 0.25%, not dead',
-            },
-          ],
-          '@babel/preset-react',
-        ],
-        plugins: [
-          [
-            '@babel/plugin-transform-runtime',
-            {
-              useESModules: true,
-            },
-          ],
-          ['@babel/plugin-proposal-class-properties', { loose: true }],
-        ],
         exclude: ['node_modules/@babel/**'],
         runtimeHelpers: true,
       }),

@@ -21,9 +21,11 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   return target;
 }
 
+var objectWithoutPropertiesLoose = _objectWithoutPropertiesLoose;
+
 function _objectWithoutProperties(source, excluded) {
   if (source == null) return {};
-  var target = _objectWithoutPropertiesLoose(source, excluded);
+  var target = objectWithoutPropertiesLoose(source, excluded);
   var key, i;
 
   if (Object.getOwnPropertySymbols) {
@@ -40,11 +42,15 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
+var objectWithoutProperties = _objectWithoutProperties;
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
+
+var classCallCheck = _classCallCheck;
 
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
@@ -62,21 +68,31 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 
+var createClass = _createClass;
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var _typeof_1 = createCommonjsModule(function (module) {
 function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
-    _typeof = function _typeof(obj) {
+    module.exports = _typeof = function _typeof(obj) {
       return _typeof2(obj);
     };
   } else {
-    _typeof = function _typeof(obj) {
+    module.exports = _typeof = function _typeof(obj) {
       return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
     };
   }
 
   return _typeof(obj);
 }
+
+module.exports = _typeof;
+});
 
 function _assertThisInitialized(self) {
   if (self === void 0) {
@@ -86,29 +102,41 @@ function _assertThisInitialized(self) {
   return self;
 }
 
+var assertThisInitialized = _assertThisInitialized;
+
 function _possibleConstructorReturn(self, call) {
-  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+  if (call && (_typeof_1(call) === "object" || typeof call === "function")) {
     return call;
   }
 
-  return _assertThisInitialized(self);
+  return assertThisInitialized(self);
 }
 
+var possibleConstructorReturn = _possibleConstructorReturn;
+
+var getPrototypeOf = createCommonjsModule(function (module) {
 function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
     return o.__proto__ || Object.getPrototypeOf(o);
   };
   return _getPrototypeOf(o);
 }
 
+module.exports = _getPrototypeOf;
+});
+
+var setPrototypeOf = createCommonjsModule(function (module) {
 function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
     o.__proto__ = p;
     return o;
   };
 
   return _setPrototypeOf(o, p);
 }
+
+module.exports = _setPrototypeOf;
+});
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -122,27 +150,127 @@ function _inherits(subClass, superClass) {
       configurable: true
     }
   });
-  if (superClass) _setPrototypeOf(subClass, superClass);
+  if (superClass) setPrototypeOf(subClass, superClass);
 }
+
+var inherits = _inherits;
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+var defineProperty = _defineProperty;
 
 var InfiniteScroll =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(InfiniteScroll, _Component);
+  inherits(InfiniteScroll, _Component);
 
-  function InfiniteScroll(props) {
+  function InfiniteScroll() {
+    var _getPrototypeOf2;
+
     var _this;
 
-    _classCallCheck(this, InfiniteScroll);
+    classCallCheck(this, InfiniteScroll);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(InfiniteScroll).call(this, props));
-    _this.scrollListener = _this.scrollListener.bind(_assertThisInitialized(_this));
-    _this.eventListenerOptions = _this.eventListenerOptions.bind(_assertThisInitialized(_this));
-    _this.mousewheelListener = _this.mousewheelListener.bind(_assertThisInitialized(_this));
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = possibleConstructorReturn(this, (_getPrototypeOf2 = getPrototypeOf(InfiniteScroll)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    defineProperty(assertThisInitialized(_this), "isPassiveSupported", function () {
+      var passive = false;
+      var testOptions = {
+        get passive() {
+          passive = true;
+        }
+
+      };
+
+      try {
+        document.addEventListener('test', null, testOptions);
+        document.removeEventListener('test', null, testOptions);
+      } catch (e) {// ignore
+      }
+
+      return passive;
+    });
+
+    defineProperty(assertThisInitialized(_this), "eventListenerOptions", function () {
+      var options = _this.props.useCapture;
+
+      if (_this.isPassiveSupported()) {
+        options = {
+          useCapture: _this.props.useCapture,
+          passive: true
+        };
+      }
+
+      return options;
+    });
+
+    defineProperty(assertThisInitialized(_this), "mousewheelListener", function (e) {
+      // Prevents Chrome hangups
+      // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
+      if (e.deltaY === 1 && !_this.isPassiveSupported()) {
+        e.preventDefault();
+      }
+    });
+
+    defineProperty(assertThisInitialized(_this), "scrollListener", function () {
+      var el = _this.scrollComponent;
+      var scrollEl = window;
+
+      var parentNode = _this.getParentElement(el);
+
+      var offset;
+
+      if (_this.props.useWindow) {
+        var doc = document.documentElement || document.body.parentNode || document.body;
+        var scrollTop = scrollEl.pageYOffset !== undefined ? scrollEl.pageYOffset : doc.scrollTop;
+
+        if (_this.props.isReverse) {
+          offset = scrollTop;
+        } else {
+          offset = _this.calculateOffset(el, scrollTop);
+        }
+      } else if (_this.props.isReverse) {
+        offset = parentNode.scrollTop;
+      } else {
+        offset = el.scrollHeight - parentNode.scrollTop - parentNode.clientHeight;
+      } // Here we make sure the element is visible as well as checking the offset
+
+
+      if (offset < Number(_this.props.threshold) && el && el.offsetParent !== null) {
+        _this.detachScrollListener();
+
+        _this.beforeScrollHeight = parentNode.scrollHeight;
+        _this.beforeScrollTop = parentNode.scrollTop; // Call loadMore after detachScrollListener to allow for non-async loadMore functions
+
+        if (typeof _this.props.loadMore === 'function') {
+          _this.props.loadMore(_this.pageLoaded += 1);
+
+          _this.loadMore = true;
+        }
+      }
+    });
+
     return _this;
   }
 
-  _createClass(InfiniteScroll, [{
+  createClass(InfiniteScroll, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       this.pageLoaded = this.props.pageStart;
@@ -183,41 +311,8 @@ function (_Component) {
       }
     }
   }, {
-    key: "isPassiveSupported",
-    value: function isPassiveSupported() {
-      var passive = false;
-      var testOptions = {
-        get passive() {
-          passive = true;
-        }
-
-      };
-
-      try {
-        document.addEventListener('test', null, testOptions);
-        document.removeEventListener('test', null, testOptions);
-      } catch (e) {// ignore
-      }
-
-      return passive;
-    }
-  }, {
-    key: "eventListenerOptions",
-    value: function eventListenerOptions() {
-      var options = this.props.useCapture;
-
-      if (this.isPassiveSupported()) {
-        options = {
-          useCapture: this.props.useCapture,
-          passive: true
-        };
-      }
-
-      return options;
-    } // Set a defaut loader for all your `InfiniteScroll` components
-
-  }, {
     key: "setDefaultLoader",
+    // Set a defaut loader for all your `InfiniteScroll` components
     value: function setDefaultLoader(loader) {
       this.defaultLoader = loader;
     }
@@ -284,50 +379,6 @@ function (_Component) {
       }
     }
   }, {
-    key: "mousewheelListener",
-    value: function mousewheelListener(e) {
-      // Prevents Chrome hangups
-      // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
-      if (e.deltaY === 1 && !this.isPassiveSupported()) {
-        e.preventDefault();
-      }
-    }
-  }, {
-    key: "scrollListener",
-    value: function scrollListener() {
-      var el = this.scrollComponent;
-      var scrollEl = window;
-      var parentNode = this.getParentElement(el);
-      var offset;
-
-      if (this.props.useWindow) {
-        var doc = document.documentElement || document.body.parentNode || document.body;
-        var scrollTop = scrollEl.pageYOffset !== undefined ? scrollEl.pageYOffset : doc.scrollTop;
-
-        if (this.props.isReverse) {
-          offset = scrollTop;
-        } else {
-          offset = this.calculateOffset(el, scrollTop);
-        }
-      } else if (this.props.isReverse) {
-        offset = parentNode.scrollTop;
-      } else {
-        offset = el.scrollHeight - parentNode.scrollTop - parentNode.clientHeight;
-      } // Here we make sure the element is visible as well as checking the offset
-
-
-      if (offset < Number(this.props.threshold) && el && el.offsetParent !== null) {
-        this.detachScrollListener();
-        this.beforeScrollHeight = parentNode.scrollHeight;
-        this.beforeScrollTop = parentNode.scrollTop; // Call loadMore after detachScrollListener to allow for non-async loadMore functions
-
-        if (typeof this.props.loadMore === 'function') {
-          this.props.loadMore(this.pageLoaded += 1);
-          this.loadMore = true;
-        }
-      }
-    }
-  }, {
     key: "calculateOffset",
     value: function calculateOffset(el, scrollTop) {
       if (!el) {
@@ -366,7 +417,7 @@ function (_Component) {
           useWindow = renderProps.useWindow,
           getScrollParent = renderProps.getScrollParent,
           resetPage = renderProps.resetPage,
-          props = _objectWithoutProperties(renderProps, ["children", "element", "hasMore", "initialLoad", "isReverse", "loader", "loadMore", "pageStart", "ref", "threshold", "useCapture", "useWindow", "getScrollParent", "resetPage"]);
+          props = objectWithoutProperties(renderProps, ["children", "element", "hasMore", "initialLoad", "isReverse", "loader", "loadMore", "pageStart", "ref", "threshold", "useCapture", "useWindow", "getScrollParent", "resetPage"]);
 
       props.ref = function (node) {
         _this2.scrollComponent = node;
@@ -393,7 +444,7 @@ function (_Component) {
   return InfiniteScroll;
 }(React.Component);
 
-InfiniteScroll.propTypes = {
+defineProperty(InfiniteScroll, "propTypes", {
   children: PropTypes.node.isRequired,
   element: PropTypes.node,
   hasMore: PropTypes.bool,
@@ -408,8 +459,9 @@ InfiniteScroll.propTypes = {
   useCapture: PropTypes.bool,
   useWindow: PropTypes.bool,
   resetPage: PropTypes.bool
-};
-InfiniteScroll.defaultProps = {
+});
+
+defineProperty(InfiniteScroll, "defaultProps", {
   element: 'div',
   hasMore: false,
   initialLoad: true,
@@ -422,7 +474,7 @@ InfiniteScroll.defaultProps = {
   loader: null,
   getScrollParent: null,
   resetPage: false
-};
+});
 
 module.exports = InfiniteScroll;
 //# sourceMappingURL=react-infinite-scroll-loading.cjs.js.map
