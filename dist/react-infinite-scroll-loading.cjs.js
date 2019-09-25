@@ -259,7 +259,7 @@ function (_Component) {
         _this.beforeScrollHeight = parentNode.scrollHeight;
         _this.beforeScrollTop = parentNode.scrollTop; // Call loadMore after detachScrollListener to allow for non-async loadMore functions
 
-        if (typeof _this.props.loadMore === 'function') {
+        if (_this.props.hasMore && typeof _this.props.loadMore === 'function') {
           _this.props.loadMore(_this.pageLoaded += 1);
 
           _this.loadMore = true;

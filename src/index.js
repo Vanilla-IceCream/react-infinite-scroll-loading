@@ -138,8 +138,7 @@ export default class InfiniteScroll extends Component {
   }
 
   getParentElement(el) {
-    const scrollParent =
-      this.props.getScrollParent && this.props.getScrollParent();
+    const scrollParent =      this.props.getScrollParent && this.props.getScrollParent();
     if (scrollParent != null) {
       return scrollParent;
     }
@@ -222,7 +221,7 @@ export default class InfiniteScroll extends Component {
       this.beforeScrollHeight = parentNode.scrollHeight;
       this.beforeScrollTop = parentNode.scrollTop;
       // Call loadMore after detachScrollListener to allow for non-async loadMore functions
-      if (typeof this.props.loadMore === 'function') {
+      if (this.props.hasMore && typeof this.props.loadMore === 'function') {
         this.props.loadMore((this.pageLoaded += 1));
         this.loadMore = true;
       }
@@ -267,7 +266,7 @@ export default class InfiniteScroll extends Component {
       ...props
     } = renderProps;
 
-    props.ref = node => {
+    props.ref = (node) => {
       this.scrollComponent = node;
       if (ref) {
         ref(node);
