@@ -38,6 +38,8 @@ import InfiniteScroll from 'react-infinite-scroll-loading';
 </InfiniteScroll>
 ```
 
+[![Edit red-https-thrgc](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/red-https-thrgc?fontsize=14)
+
 ## API
 
 ### `resetPage`
