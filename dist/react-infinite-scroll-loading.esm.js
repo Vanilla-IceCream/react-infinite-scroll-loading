@@ -346,11 +346,6 @@ function (_Component) {
       return el && el.parentNode;
     }
   }, {
-    key: "filterProps",
-    value: function filterProps(props) {
-      return props;
-    }
-  }, {
     key: "attachScrollListener",
     value: function attachScrollListener() {
       var parentElement = this.getParentElement(this.scrollComponent);
@@ -396,23 +391,22 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var renderProps = this.filterProps(this.props);
-
-      var children = renderProps.children,
-          element = renderProps.element,
-          hasMore = renderProps.hasMore,
-          initialLoad = renderProps.initialLoad,
-          isReverse = renderProps.isReverse,
-          loader = renderProps.loader,
-          loadMore = renderProps.loadMore,
-          pageStart = renderProps.pageStart,
-          ref = renderProps.ref,
-          threshold = renderProps.threshold,
-          useCapture = renderProps.useCapture,
-          useWindow = renderProps.useWindow,
-          getScrollParent = renderProps.getScrollParent,
-          resetPage = renderProps.resetPage,
-          props = objectWithoutProperties(renderProps, ["children", "element", "hasMore", "initialLoad", "isReverse", "loader", "loadMore", "pageStart", "ref", "threshold", "useCapture", "useWindow", "getScrollParent", "resetPage"]);
+      var _this$props = this.props,
+          children = _this$props.children,
+          element = _this$props.element,
+          hasMore = _this$props.hasMore,
+          initialLoad = _this$props.initialLoad,
+          isReverse = _this$props.isReverse,
+          loader = _this$props.loader,
+          loadMore = _this$props.loadMore,
+          pageStart = _this$props.pageStart,
+          ref = _this$props.ref,
+          threshold = _this$props.threshold,
+          useCapture = _this$props.useCapture,
+          useWindow = _this$props.useWindow,
+          getScrollParent = _this$props.getScrollParent,
+          resetPage = _this$props.resetPage,
+          props = objectWithoutProperties(_this$props, ["children", "element", "hasMore", "initialLoad", "isReverse", "loader", "loadMore", "pageStart", "ref", "threshold", "useCapture", "useWindow", "getScrollParent", "resetPage"]);
 
       props.ref = function (node) {
         _this2.scrollComponent = node;

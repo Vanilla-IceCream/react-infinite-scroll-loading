@@ -145,10 +145,6 @@ export default class InfiniteScroll extends Component {
     return el && el.parentNode;
   }
 
-  filterProps(props) {
-    return props;
-  }
-
   attachScrollListener() {
     const parentElement = this.getParentElement(this.scrollComponent);
 
@@ -247,7 +243,6 @@ export default class InfiniteScroll extends Component {
   }
 
   render() {
-    const renderProps = this.filterProps(this.props);
     const {
       children,
       element,
@@ -264,7 +259,7 @@ export default class InfiniteScroll extends Component {
       getScrollParent,
       resetPage,
       ...props
-    } = renderProps;
+    } = this.props;
 
     props.ref = (node) => {
       this.scrollComponent = node;

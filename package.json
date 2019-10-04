@@ -1,6 +1,6 @@
 {
   "name": "react-infinite-scroll-loading",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Infinite scroll component for React.",
   "main": "dist/react-infinite-scroll-loading.cjs.js",
   "module": "dist/react-infinite-scroll-loading.esm.js",
