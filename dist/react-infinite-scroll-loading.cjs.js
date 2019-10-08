@@ -172,62 +172,27 @@ function _defineProperty(obj, key, value) {
 
 var defineProperty = _defineProperty;
 
-var InfiniteScroll =
+var InfiniteScrollLoading =
 /*#__PURE__*/
 function (_Component) {
-  inherits(InfiniteScroll, _Component);
+  inherits(InfiniteScrollLoading, _Component);
 
-  function InfiniteScroll() {
+  function InfiniteScrollLoading() {
     var _getPrototypeOf2;
 
     var _this;
 
-    classCallCheck(this, InfiniteScroll);
+    classCallCheck(this, InfiniteScrollLoading);
 
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    _this = possibleConstructorReturn(this, (_getPrototypeOf2 = getPrototypeOf(InfiniteScroll)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = possibleConstructorReturn(this, (_getPrototypeOf2 = getPrototypeOf(InfiniteScrollLoading)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    defineProperty(assertThisInitialized(_this), "isPassiveSupported", function () {
-      var passive = false;
-      var testOptions = {
-        get passive() {
-          passive = true;
-        }
+    defineProperty(assertThisInitialized(_this), "scrollComponent", null);
 
-      };
-
-      try {
-        document.addEventListener('test', null, testOptions);
-        document.removeEventListener('test', null, testOptions);
-      } catch (e) {// ignore
-      }
-
-      return passive;
-    });
-
-    defineProperty(assertThisInitialized(_this), "eventListenerOptions", function () {
-      var options = _this.props.useCapture;
-
-      if (_this.isPassiveSupported()) {
-        options = {
-          useCapture: _this.props.useCapture,
-          passive: true
-        };
-      }
-
-      return options;
-    });
-
-    defineProperty(assertThisInitialized(_this), "mousewheelListener", function (e) {
-      // Prevents Chrome hangups
-      // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
-      if (e.deltaY === 1 && !_this.isPassiveSupported()) {
-        e.preventDefault();
-      }
-    });
+    defineProperty(assertThisInitialized(_this), "pageLoaded", null);
 
     defineProperty(assertThisInitialized(_this), "scrollListener", function () {
       var el = _this.scrollComponent;
@@ -270,11 +235,11 @@ function (_Component) {
     return _this;
   }
 
-  createClass(InfiniteScroll, [{
+  createClass(InfiniteScrollLoading, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.pageLoaded = this.props.pageStart;
-      this.options = this.eventListenerOptions();
+      this.pageLoaded = this.props.pageStart; // this.options = this.eventListenerOptions();
+
       this.attachScrollListener();
     }
   }, {
@@ -296,8 +261,7 @@ function (_Component) {
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      this.detachScrollListener();
-      this.detachMousewheelListener();
+      this.detachScrollListener(); // this.detachMousewheelListener();
     }
   }, {
     key: "scrollToTop",
@@ -309,24 +273,43 @@ function (_Component) {
       } else {
         parentElement.scrollTop = 0;
       }
-    }
-  }, {
-    key: "setDefaultLoader",
-    // Set a defaut loader for all your `InfiniteScroll` components
-    value: function setDefaultLoader(loader) {
-      this.defaultLoader = loader;
-    }
-  }, {
-    key: "detachMousewheelListener",
-    value: function detachMousewheelListener() {
-      var scrollEl = window;
+    } // isPassiveSupported = () => {
+    //   let passive = false;
+    //   const testOptions = {
+    //     get passive() {
+    //       passive = true;
+    //     },
+    //   };
+    //   try {
+    //     document.addEventListener('test', null, testOptions);
+    //     document.removeEventListener('test', null, testOptions);
+    //   } catch (e) {
+    //     // ignore
+    //   }
+    //   return passive;
+    // };
+    // eventListenerOptions = () => {
+    //   let options = this.props.useCapture;
+    //   if (this.isPassiveSupported()) {
+    //     options = {
+    //       useCapture: this.props.useCapture,
+    //       passive: true,
+    //     };
+    //   }
+    //   return options;
+    // };
+    // detachMousewheelListener() {
+    //   let scrollEl = window;
+    //   if (this.props.useWindow === false) {
+    //     scrollEl = this.scrollComponent.parentNode;
+    //   }
+    //   scrollEl.removeEventListener(
+    //     'mousewheel',
+    //     this.mousewheelListener,
+    //     this.options ? this.options : this.props.useCapture,
+    //   );
+    // }
 
-      if (this.props.useWindow === false) {
-        scrollEl = this.scrollComponent.parentNode;
-      }
-
-      scrollEl.removeEventListener('mousewheel', this.mousewheelListener, this.options ? this.options : this.props.useCapture);
-    }
   }, {
     key: "detachScrollListener",
     value: function detachScrollListener() {
@@ -336,18 +319,18 @@ function (_Component) {
         scrollEl = this.getParentElement(this.scrollComponent);
       }
 
-      scrollEl.removeEventListener('scroll', this.scrollListener, this.options ? this.options : this.props.useCapture);
-      scrollEl.removeEventListener('resize', this.scrollListener, this.options ? this.options : this.props.useCapture);
+      scrollEl.removeEventListener('scroll', this.scrollListener,
+      /* this.options ? this.options : */
+      this.props.useCapture);
+      scrollEl.removeEventListener('resize', this.scrollListener,
+      /* this.options ? this.options : */
+      this.props.useCapture);
     }
   }, {
     key: "getParentElement",
     value: function getParentElement(el) {
       var scrollParent = this.props.getScrollParent && this.props.getScrollParent();
-
-      if (scrollParent != null) {
-        return scrollParent;
-      }
-
+      if (scrollParent != null) return scrollParent;
       return el && el.parentNode;
     }
   }, {
@@ -363,32 +346,41 @@ function (_Component) {
 
       if (this.props.useWindow === false) {
         scrollEl = parentElement;
-      }
+      } // scrollEl.addEventListener(
+      //   'mousewheel',
+      //   this.mousewheelListener,
+      //   this.options ? this.options : this.props.useCapture,
+      // );
 
-      scrollEl.addEventListener('mousewheel', this.mousewheelListener, this.options ? this.options : this.props.useCapture);
-      scrollEl.addEventListener('scroll', this.scrollListener, this.options ? this.options : this.props.useCapture);
-      scrollEl.addEventListener('resize', this.scrollListener, this.options ? this.options : this.props.useCapture);
+
+      scrollEl.addEventListener('scroll', this.scrollListener,
+      /* this.options ? this.options : */
+      this.props.useCapture);
+      scrollEl.addEventListener('resize', this.scrollListener,
+      /* this.options ? this.options : */
+      this.props.useCapture);
 
       if (this.props.initialLoad) {
         this.scrollListener();
       }
-    }
+    } // mousewheelListener = (e) => {
+    //   // Prevents Chrome hangups
+    //   // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
+    //   if (e.deltaY === 1 && !this.isPassiveSupported()) {
+    //     e.preventDefault();
+    //   }
+    // };
+
   }, {
     key: "calculateOffset",
     value: function calculateOffset(el, scrollTop) {
-      if (!el) {
-        return 0;
-      }
-
+      if (!el) return 0;
       return this.calculateTopPosition(el) + (el.offsetHeight - scrollTop - window.innerHeight);
     }
   }, {
     key: "calculateTopPosition",
     value: function calculateTopPosition(el) {
-      if (!el) {
-        return 0;
-      }
-
+      if (!el) return 0;
       return el.offsetTop + this.calculateTopPosition(el.offsetParent);
     }
   }, {
@@ -435,40 +427,44 @@ function (_Component) {
     }
   }]);
 
-  return InfiniteScroll;
+  return InfiniteScrollLoading;
 }(React.Component);
 
-defineProperty(InfiniteScroll, "propTypes", {
-  children: PropTypes.node.isRequired,
+defineProperty(InfiniteScrollLoading, "propTypes", {
+  children: PropTypes.node,
+  ref: PropTypes.func,
   element: PropTypes.node,
+  pageStart: PropTypes.number,
   hasMore: PropTypes.bool,
+  loadMore: PropTypes.func,
+  resetPage: PropTypes.bool,
+  threshold: PropTypes.number,
+  useWindow: PropTypes.bool,
+  getScrollParent: PropTypes.func,
+  useCapture: PropTypes.bool,
+  // Deprecated
   initialLoad: PropTypes.bool,
   isReverse: PropTypes.bool,
-  loader: PropTypes.node,
-  loadMore: PropTypes.func.isRequired,
-  pageStart: PropTypes.number,
-  ref: PropTypes.func,
-  getScrollParent: PropTypes.func,
-  threshold: PropTypes.number,
-  useCapture: PropTypes.bool,
-  useWindow: PropTypes.bool,
-  resetPage: PropTypes.bool
+  loader: PropTypes.node
 });
 
-defineProperty(InfiniteScroll, "defaultProps", {
-  element: 'div',
-  hasMore: false,
-  initialLoad: true,
-  pageStart: 0,
+defineProperty(InfiniteScrollLoading, "defaultProps", {
+  children: undefined,
   ref: null,
+  element: 'div',
+  pageStart: 0,
+  hasMore: false,
+  loadMore: null,
+  resetPage: false,
   threshold: 250,
   useWindow: true,
-  isReverse: false,
-  useCapture: false,
-  loader: null,
   getScrollParent: null,
-  resetPage: false
+  useCapture: false,
+  // Deprecated
+  initialLoad: false,
+  isReverse: false,
+  loader: null
 });
 
-module.exports = InfiniteScroll;
+module.exports = InfiniteScrollLoading;
 //# sourceMappingURL=react-infinite-scroll-loading.cjs.js.map

@@ -1,42 +1,54 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class InfiniteScroll extends Component {
+export default class InfiniteScrollLoading extends Component {
   static propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
+    ref: PropTypes.func,
+
     element: PropTypes.node,
+    pageStart: PropTypes.number,
     hasMore: PropTypes.bool,
+    loadMore: PropTypes.func,
+    resetPage: PropTypes.bool,
+    threshold: PropTypes.number,
+    useWindow: PropTypes.bool,
+    getScrollParent: PropTypes.func,
+    useCapture: PropTypes.bool,
+
+    // Deprecated
     initialLoad: PropTypes.bool,
     isReverse: PropTypes.bool,
     loader: PropTypes.node,
-    loadMore: PropTypes.func.isRequired,
-    pageStart: PropTypes.number,
-    ref: PropTypes.func,
-    getScrollParent: PropTypes.func,
-    threshold: PropTypes.number,
-    useCapture: PropTypes.bool,
-    useWindow: PropTypes.bool,
-    resetPage: PropTypes.bool,
   };
 
   static defaultProps = {
-    element: 'div',
-    hasMore: false,
-    initialLoad: true,
-    pageStart: 0,
+    children: undefined,
     ref: null,
+
+    element: 'div',
+    pageStart: 0,
+    hasMore: false,
+    loadMore: null,
+    resetPage: false,
     threshold: 250,
     useWindow: true,
-    isReverse: false,
-    useCapture: false,
-    loader: null,
     getScrollParent: null,
-    resetPage: false,
+    useCapture: false,
+
+    // Deprecated
+    initialLoad: false,
+    isReverse: false,
+    loader: null,
   };
+
+  scrollComponent = null;
+
+  pageLoaded = null;
 
   componentDidMount() {
     this.pageLoaded = this.props.pageStart;
-    this.options = this.eventListenerOptions();
+    // this.options = this.eventListenerOptions();
     this.attachScrollListener();
   }
 
@@ -58,7 +70,7 @@ export default class InfiniteScroll extends Component {
 
   componentWillUnmount() {
     this.detachScrollListener();
-    this.detachMousewheelListener();
+    // this.detachMousewheelListener();
   }
 
   scrollToTop() {
@@ -71,53 +83,48 @@ export default class InfiniteScroll extends Component {
     }
   }
 
-  isPassiveSupported = () => {
-    let passive = false;
+  // isPassiveSupported = () => {
+  //   let passive = false;
 
-    const testOptions = {
-      get passive() {
-        passive = true;
-      },
-    };
+  //   const testOptions = {
+  //     get passive() {
+  //       passive = true;
+  //     },
+  //   };
 
-    try {
-      document.addEventListener('test', null, testOptions);
-      document.removeEventListener('test', null, testOptions);
-    } catch (e) {
-      // ignore
-    }
-    return passive;
-  };
+  //   try {
+  //     document.addEventListener('test', null, testOptions);
+  //     document.removeEventListener('test', null, testOptions);
+  //   } catch (e) {
+  //     // ignore
+  //   }
+  //   return passive;
+  // };
 
-  eventListenerOptions = () => {
-    let options = this.props.useCapture;
+  // eventListenerOptions = () => {
+  //   let options = this.props.useCapture;
 
-    if (this.isPassiveSupported()) {
-      options = {
-        useCapture: this.props.useCapture,
-        passive: true,
-      };
-    }
-    return options;
-  };
+  //   if (this.isPassiveSupported()) {
+  //     options = {
+  //       useCapture: this.props.useCapture,
+  //       passive: true,
+  //     };
+  //   }
+  //   return options;
+  // };
 
-  // Set a defaut loader for all your `InfiniteScroll` components
-  setDefaultLoader(loader) {
-    this.defaultLoader = loader;
-  }
+  // detachMousewheelListener() {
+  //   let scrollEl = window;
+  //   if (this.props.useWindow === false) {
+  //     scrollEl = this.scrollComponent.parentNode;
+  //   }
 
-  detachMousewheelListener() {
-    let scrollEl = window;
-    if (this.props.useWindow === false) {
-      scrollEl = this.scrollComponent.parentNode;
-    }
-
-    scrollEl.removeEventListener(
-      'mousewheel',
-      this.mousewheelListener,
-      this.options ? this.options : this.props.useCapture,
-    );
-  }
+  //   scrollEl.removeEventListener(
+  //     'mousewheel',
+  //     this.mousewheelListener,
+  //     this.options ? this.options : this.props.useCapture,
+  //   );
+  // }
 
   detachScrollListener() {
     let scrollEl = window;
@@ -128,20 +135,18 @@ export default class InfiniteScroll extends Component {
     scrollEl.removeEventListener(
       'scroll',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture,
+      /* this.options ? this.options : */ this.props.useCapture,
     );
     scrollEl.removeEventListener(
       'resize',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture,
+      /* this.options ? this.options : */ this.props.useCapture,
     );
   }
 
   getParentElement(el) {
-    const scrollParent =      this.props.getScrollParent && this.props.getScrollParent();
-    if (scrollParent != null) {
-      return scrollParent;
-    }
+    const scrollParent = this.props.getScrollParent && this.props.getScrollParent();
+    if (scrollParent != null) return scrollParent;
     return el && el.parentNode;
   }
 
@@ -157,20 +162,20 @@ export default class InfiniteScroll extends Component {
       scrollEl = parentElement;
     }
 
-    scrollEl.addEventListener(
-      'mousewheel',
-      this.mousewheelListener,
-      this.options ? this.options : this.props.useCapture,
-    );
+    // scrollEl.addEventListener(
+    //   'mousewheel',
+    //   this.mousewheelListener,
+    //   this.options ? this.options : this.props.useCapture,
+    // );
     scrollEl.addEventListener(
       'scroll',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture,
+      /* this.options ? this.options : */ this.props.useCapture,
     );
     scrollEl.addEventListener(
       'resize',
       this.scrollListener,
-      this.options ? this.options : this.props.useCapture,
+      /* this.options ? this.options : */ this.props.useCapture,
     );
 
     if (this.props.initialLoad) {
@@ -178,13 +183,13 @@ export default class InfiniteScroll extends Component {
     }
   }
 
-  mousewheelListener = (e) => {
-    // Prevents Chrome hangups
-    // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
-    if (e.deltaY === 1 && !this.isPassiveSupported()) {
-      e.preventDefault();
-    }
-  };
+  // mousewheelListener = (e) => {
+  //   // Prevents Chrome hangups
+  //   // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
+  //   if (e.deltaY === 1 && !this.isPassiveSupported()) {
+  //     e.preventDefault();
+  //   }
+  // };
 
   scrollListener = () => {
     const el = this.scrollComponent;
@@ -225,9 +230,7 @@ export default class InfiniteScroll extends Component {
   };
 
   calculateOffset(el, scrollTop) {
-    if (!el) {
-      return 0;
-    }
+    if (!el) return 0;
 
     return (
       this.calculateTopPosition(el)
@@ -236,9 +239,7 @@ export default class InfiniteScroll extends Component {
   }
 
   calculateTopPosition(el) {
-    if (!el) {
-      return 0;
-    }
+    if (!el) return 0;
     return el.offsetTop + this.calculateTopPosition(el.offsetParent);
   }
 
