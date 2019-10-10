@@ -47,13 +47,15 @@ export default class InfiniteScrollLoading extends Component {
   pageLoaded = null;
 
   componentDidMount() {
-    this.pageLoaded = this.props.pageStart;
-    // this.options = this.eventListenerOptions();
+    const { pageStart } = this.props;
+    this.pageLoaded = pageStart;
     this.attachScrollListener();
   }
 
   componentDidUpdate() {
-    if (this.props.isReverse && this.loadMore) {
+    const { isReverse, resetPage, pageStart } = this.props;
+
+    if (isReverse && this.loadMore) {
       const parentElement = this.getParentElement(this.scrollComponent);
       parentElement.scrollTop = parentElement.scrollHeight
         - this.beforeScrollHeight
@@ -62,168 +64,96 @@ export default class InfiniteScrollLoading extends Component {
     }
     this.attachScrollListener();
 
-    if (this.props.resetPage) {
-      this.pageLoaded = this.props.pageStart;
+    if (resetPage) {
+      this.pageLoaded = pageStart;
       this.scrollToTop();
     }
   }
 
   componentWillUnmount() {
     this.detachScrollListener();
-    // this.detachMousewheelListener();
   }
 
   scrollToTop() {
+    const { useWindow } = this.props;
     const parentElement = this.getParentElement(this.scrollComponent);
 
-    if (this.props.useWindow) {
+    if (useWindow) {
       window.scrollTo(0, 0);
     } else {
       parentElement.scrollTop = 0;
     }
   }
 
-  // isPassiveSupported = () => {
-  //   let passive = false;
-
-  //   const testOptions = {
-  //     get passive() {
-  //       passive = true;
-  //     },
-  //   };
-
-  //   try {
-  //     document.addEventListener('test', null, testOptions);
-  //     document.removeEventListener('test', null, testOptions);
-  //   } catch (e) {
-  //     // ignore
-  //   }
-  //   return passive;
-  // };
-
-  // eventListenerOptions = () => {
-  //   let options = this.props.useCapture;
-
-  //   if (this.isPassiveSupported()) {
-  //     options = {
-  //       useCapture: this.props.useCapture,
-  //       passive: true,
-  //     };
-  //   }
-  //   return options;
-  // };
-
-  // detachMousewheelListener() {
-  //   let scrollEl = window;
-  //   if (this.props.useWindow === false) {
-  //     scrollEl = this.scrollComponent.parentNode;
-  //   }
-
-  //   scrollEl.removeEventListener(
-  //     'mousewheel',
-  //     this.mousewheelListener,
-  //     this.options ? this.options : this.props.useCapture,
-  //   );
-  // }
-
   detachScrollListener() {
+    const { useWindow, useCapture } = this.props;
+
     let scrollEl = window;
-    if (this.props.useWindow === false) {
+    if (useWindow === false) {
       scrollEl = this.getParentElement(this.scrollComponent);
     }
 
-    scrollEl.removeEventListener(
-      'scroll',
-      this.scrollListener,
-      /* this.options ? this.options : */ this.props.useCapture,
-    );
-    scrollEl.removeEventListener(
-      'resize',
-      this.scrollListener,
-      /* this.options ? this.options : */ this.props.useCapture,
-    );
+    scrollEl.removeEventListener('scroll', this.scrolListener, useCapture);
+    scrollEl.removeEventListener('resize', this.scrollListener, useCapture);
   }
 
   getParentElement(el) {
-    const scrollParent = this.props.getScrollParent && this.props.getScrollParent();
-    if (scrollParent != null) return scrollParent;
+    const { getScrollParent } = this.props;
+    const scrollParent = getScrollParent && getScrollParent();
+    if (scrollParent !== null) return scrollParent;
     return el && el.parentNode;
   }
 
   attachScrollListener() {
+    const { hasMore, useWindow, useCapture, initialLoad } = this.props;
     const parentElement = this.getParentElement(this.scrollComponent);
 
-    if (!this.props.hasMore || !parentElement) {
-      return;
-    }
+    if (!hasMore || !parentElement) return;
 
     let scrollEl = window;
-    if (this.props.useWindow === false) {
+    if (useWindow === false) {
       scrollEl = parentElement;
     }
 
-    // scrollEl.addEventListener(
-    //   'mousewheel',
-    //   this.mousewheelListener,
-    //   this.options ? this.options : this.props.useCapture,
-    // );
-    scrollEl.addEventListener(
-      'scroll',
-      this.scrollListener,
-      /* this.options ? this.options : */ this.props.useCapture,
-    );
-    scrollEl.addEventListener(
-      'resize',
-      this.scrollListener,
-      /* this.options ? this.options : */ this.props.useCapture,
-    );
+    scrollEl.addEventListener('scroll', this.scrollListener, useCapture);
+    scrollEl.addEventListener('resize', this.scrollListener, useCapture);
 
-    if (this.props.initialLoad) {
+    if (initialLoad) {
       this.scrollListener();
     }
   }
 
-  // mousewheelListener = (e) => {
-  //   // Prevents Chrome hangups
-  //   // See: https://stackoverflow.com/questions/47524205/random-high-content-download-time-in-chrome/47684257#47684257
-  //   if (e.deltaY === 1 && !this.isPassiveSupported()) {
-  //     e.preventDefault();
-  //   }
-  // };
-
   scrollListener = () => {
+    const { useWindow, isReverse, threshold, hasMore, loadMore } = this.props;
     const el = this.scrollComponent;
     const scrollEl = window;
     const parentNode = this.getParentElement(el);
 
     let offset;
-    if (this.props.useWindow) {
+    if (useWindow) {
       const doc = document.documentElement || document.body.parentNode || document.body;
       const scrollTop = scrollEl.pageYOffset !== undefined
         ? scrollEl.pageYOffset
         : doc.scrollTop;
-      if (this.props.isReverse) {
+      if (isReverse) {
         offset = scrollTop;
       } else {
         offset = this.calculateOffset(el, scrollTop);
       }
-    } else if (this.props.isReverse) {
+    } else if (isReverse) {
       offset = parentNode.scrollTop;
     } else {
       offset = el.scrollHeight - parentNode.scrollTop - parentNode.clientHeight;
     }
 
     // Here we make sure the element is visible as well as checking the offset
-    if (
-      offset < Number(this.props.threshold)
-      && (el && el.offsetParent !== null)
-    ) {
+    if (offset < threshold && (el && el.offsetParent !== null)) {
       this.detachScrollListener();
       this.beforeScrollHeight = parentNode.scrollHeight;
       this.beforeScrollTop = parentNode.scrollTop;
       // Call loadMore after detachScrollListener to allow for non-async loadMore functions
-      if (this.props.hasMore && typeof this.props.loadMore === 'function') {
-        this.props.loadMore((this.pageLoaded += 1));
+      if (hasMore && typeof loadMore === 'function') {
+        loadMore((this.pageLoaded += 1));
         this.loadMore = true;
       }
     }
